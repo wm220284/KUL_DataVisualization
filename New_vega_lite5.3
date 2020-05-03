@@ -64,7 +64,8 @@
     {"filter":{"selection":"gender_c"}},
     {"filter":{"selection":"gender"}},
     {"filter":{"selection":"selection_ii"}},
-    {"filter":{"selection":"group_contact"}}
+    {"filter":{"selection":"group_contact"}},
+          {"filter":{"selection":"selection_iii"}}
   ],
   "selection":{
     "gender":{
@@ -94,6 +95,7 @@
     {"filter":{"selection":"gender"}},
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"selection_i"}},
+           {"filter":{"selection":"selection_iii"}},
          {"filter":{"selection":"group_contact"}}
   ],
      "selection":{
@@ -134,19 +136,32 @@
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"gender"}},
      {"filter":{"selection":"selection_i"}},
+         {"filter":{"selection":"selection_ii"}},
          {"filter":{"selection":"group_contact"}}
   ],
+   "selection":{
+     "selection_iii":{
+      "type":"interval",
+       "encodings": ["x"],
+      "empty":"all"
+    }
+  },
+  
   "encoding": {
     "x": {"field": "dayofweek", "type": "ordinal"},
     "y": {"aggregate": "mean", "field": "numofcont", "type": "quantitative"},
-    "color": {"value": "blue"}
+    "color": {"value": "blue"},
+      "opacity":{"condition":{"selection":"selection_iii","value":1},
+    "value":0.2}
   }},
   {
   "mark": "line",
   "encoding": {
     "x": {"field": "dayofweek", "type": "ordinal"},
     "y": {"aggregate": "mean", "field": "group_n", "type": "quantitative"},
-    "color": {"value": "red"}
+    "color": {"value": "red"},
+          "opacity":{"condition":{"selection":"selection_iii","value":1},
+    "value":0.2}
     }
   }
   ]}, 
@@ -169,6 +184,8 @@
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"gender"}},
      {"filter":{"selection":"selection_i"}},
+         {"filter":{"selection":"selection_ii"}},
+      {"filter":{"selection":"selection_iii"}},
          {"filter":{"selection":"group_contact"}}
   ],
 
