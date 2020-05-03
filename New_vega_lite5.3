@@ -1,0 +1,187 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": { "url": "https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_contact_common.csv","name":"contact"},
+  "transform":[{
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_extra.csv"},
+      "key": "part_id",
+      "fields":["part_id",	"group_n","group_yn","group_age0","group_age6","group_age12","group_age19","group_age60"]
+    }
+  },
+    
+    {
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_common.csv","name":"participant2"},
+      "key":"part_id",
+      "fields": ["hh_id","part_age","part_gender","part_id"]
+    }
+   } ,
+    {
+    "lookup":"hh_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_hh_common.csv"},
+      "key":"hh_id",
+      "fields": ["hh_size"]
+    }
+  },
+  {
+    "lookup":"part_id",
+  "from":{
+         "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_sday.csv"},
+      "key":"part_id",
+      "fields": ["sday_id","day","month","year","dayofweek"]
+    }
+  },
+  {
+    "joinaggregate": [{
+          "op": "distinct",
+          "field": "cont_id",
+          "as": "numofcont"
+      }],
+      "groupby": [
+        "part_id"
+      ]
+      },
+  { "joinaggregate": [{
+          "op": "sum",
+          "field": "group_n",
+          "as": "numofgroupcont"
+      }],
+      "groupby": [
+        "part_id"
+      ]
+      },
+      {"filter":{"selection":"gender"}}
+  ],
+  "vconcat":[{
+
+  "concat":[{
+    "width":400,
+    "height":300,
+      "transform":[
+    {"filter":{"selection":"gender_c"}},
+    {"filter":{"selection":"gender"}},
+    {"filter":{"selection":"selection_ii"}},
+    {"filter":{"selection":"group_contact"}}
+  ],
+  "selection":{
+    "gender":{
+      "type":"single",
+      "fields":["part_gender"],
+      "bind":{"input":"select","options":[null,"F","M"]}
+    },
+    "selection_i":{
+      "type":"interval",
+      "empty":"all"
+    }
+  },
+  "mark":{
+    "type":"point",
+    "filled":true},
+  "encoding":{
+    "x":{"field":"hh_size","type":"nominal"},
+    "y":{"field":"part_age","type":"quantitative"},
+    "color":{"field":"part_gender","type":"nominal"},
+    "size":{"aggregate":"distinct","field":"part_id","type":"quantitative"},
+        "opacity":{"condition":{"selection":"selection_i","value":1},
+    "value":0.2}
+  }},
+  {"width":400,
+    "height":300,
+          "transform":[
+    {"filter":{"selection":"gender"}},
+    {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"selection_i"}},
+         {"filter":{"selection":"group_contact"}}
+  ],
+     "selection":{
+    "gender_c":{
+      "type":"single",
+      "fields":["cnt_gender"],
+      "bind":{"input":"select","options":[null,"F","M","NA"]}
+    },
+     "selection_ii":{
+      "type":"interval",
+      "empty":"all"
+    },
+    "group_contact":{
+        "type":"single",
+      "fields":["group_yn"],
+      "bind":{"input":"select","options":[null,"0","1"]} 
+    }
+  },
+    "mark":{
+    "type":"point",
+    "filled":true},
+  "encoding":{
+    "y":{"field":"cnt_age_exact","type":"quantitative"},
+    "x":{"field":"duration_multi","type":"nominal"},
+    "size":{"aggregate":"count","type":"quantitative"},
+    "color":{"field":"cnt_gender","type":"nominal"},
+        "opacity":{"condition":{"selection":"selection_ii","value":1},
+    "value":0.2}
+
+}
+  }]
+  },{  "concat":[{
+ "width":400,
+"height":300,
+  "layer": [{
+  "mark": "line",
+    "transform":[
+    {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"gender"}},
+     {"filter":{"selection":"selection_i"}},
+         {"filter":{"selection":"group_contact"}}
+  ],
+  "encoding": {
+    "x": {"field": "dayofweek", "type": "ordinal"},
+    "y": {"aggregate": "mean", "field": "numofcont", "type": "quantitative"},
+    "color": {"value": "blue"}
+  }},
+  {
+  "mark": "line",
+  "encoding": {
+    "x": {"field": "dayofweek", "type": "ordinal"},
+    "y": {"aggregate": "mean", "field": "group_n", "type": "quantitative"},
+    "color": {"value": "red"}
+    }
+  }
+  ]}, 
+   {
+    "width":400,
+    "height":300,
+    "selection":{
+    "gender_c":{
+      "type":"single",
+      "fields":["cnt_gender"],
+      "bind":{"input":"select","options":[null,"F","M","NA"]}
+    },
+    "gender":{
+      "type":"single",
+      "fields":["part_gender"],
+      "bind":{"input":"select","options":[null,"F","M"]}
+    }
+  },
+   "transform":[
+    {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"gender"}},
+     {"filter":{"selection":"selection_i"}},
+         {"filter":{"selection":"group_contact"}}
+  ],
+
+  "mark":{
+    "type":"bar",
+    "filled":true},
+  "encoding":{
+    "y":{"field":"cnt_way","type":"nominal"},
+    "x":{"aggregate":"count","type":"quantitative"},
+    "color":{"field":"cnt_gender","type":"nominal"}
+    }}
+  ]
+
+  }]
+
+}
