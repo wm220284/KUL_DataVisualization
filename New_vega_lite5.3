@@ -52,8 +52,7 @@
       "groupby": [
         "part_id"
       ]
-      },
-      {"filter":{"selection":"gender"}}
+      }
   ],
   "vconcat":[{
 
@@ -65,10 +64,12 @@
     {"filter":{"selection":"gender"}},
     {"filter":{"selection":"selection_ii"}},
     {"filter":{"selection":"group_contact"}},
-          {"filter":{"selection":"selection_iii"}}
+          {"filter":{"selection":"selection_iii"}},
+          {"filter":{"selection":"physical_contact"}}
   ],
   "selection":{
     "gender":{
+
       "type":"single",
       "fields":["part_gender"],
       "bind":{"input":"select","options":[null,"F","M"]}
@@ -82,10 +83,10 @@
     "type":"point",
     "filled":true},
   "encoding":{
-    "x":{"field":"hh_size","type":"nominal"},
-    "y":{"field":"part_age","type":"quantitative"},
-    "color":{"field":"part_gender","type":"nominal"},
-    "size":{"aggregate":"distinct","field":"part_id","type":"quantitative"},
+    "x":{"title":"NUM OF PEOPLE HE/SHE LIVE WITH","field":"hh_size","type":"nominal"},
+    "y":{"title":"AGE OF PART","field":"part_age","type":"quantitative"},
+    "color":{"title":"Gender","field":"part_gender","type":"nominal"},
+    "size":{"title":"NUM OF PART/CONT","aggregate":"distinct","field":"part_id","type":"quantitative"},
         "opacity":{"condition":{"selection":"selection_i","value":1},
     "value":0.2}
   }},
@@ -96,7 +97,8 @@
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"selection_i"}},
            {"filter":{"selection":"selection_iii"}},
-         {"filter":{"selection":"group_contact"}}
+         {"filter":{"selection":"group_contact"}},
+          {"filter":{"selection":"physical_contact"}}
   ],
      "selection":{
     "gender_c":{
@@ -111,6 +113,11 @@
     "group_contact":{
         "type":"single",
       "fields":["group_yn"],
+      "bind":{"input":"select","options":[null,"0","1"]}
+    },
+    "physical_contact":{
+        "type":"single",
+      "fields":["phys_contact"],
       "bind":{"input":"select","options":[null,"0","1"]} 
     }
   },
@@ -118,8 +125,8 @@
     "type":"point",
     "filled":true},
   "encoding":{
-    "y":{"field":"cnt_age_exact","type":"quantitative"},
-    "x":{"field":"duration_multi","type":"nominal"},
+    "y":{"title":"AGE OF CONT","field":"cnt_age_exact","type":"quantitative"},
+    "x":{"title":"Total duration of contact","field":"duration_multi","type":"nominal"},
     "size":{"aggregate":"count","type":"quantitative"},
     "color":{"field":"cnt_gender","type":"nominal"},
         "opacity":{"condition":{"selection":"selection_ii","value":1},
@@ -130,14 +137,18 @@
   },{  "concat":[{
  "width":400,
 "height":300,
-  "layer": [{
+ "encoding": {
+    "x": {"title":"DAY OF WEEK","field": "dayofweek", "type": "ordinal"}
+  },
+ "layer":[{
   "mark": "line",
     "transform":[
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"gender"}},
      {"filter":{"selection":"selection_i"}},
          {"filter":{"selection":"selection_ii"}},
-         {"filter":{"selection":"group_contact"}}
+         {"filter":{"selection":"group_contact"}},
+          {"filter":{"selection":"physical_contact"}}
   ],
    "selection":{
      "selection_iii":{
@@ -148,23 +159,33 @@
   },
   
   "encoding": {
-    "x": {"field": "dayofweek", "type": "ordinal"},
-    "y": {"aggregate": "mean", "field": "numofcont", "type": "quantitative"},
+
+    "y": {"axis": {"title": "AVG NUM OF GROUP CONT PER PART", "titleColor":"blue"},"aggregate": "mean", "field": "numofcont", "type": "quantitative"},
     "color": {"value": "blue"},
       "opacity":{"condition":{"selection":"selection_iii","value":1},
     "value":0.2}
   }},
   {
   "mark": "line",
+     "transform":[
+    {"filter":{"selection":"gender_c"}},
+     {"filter":{"selection":"gender"}},
+     {"filter":{"selection":"selection_i"}},
+         {"filter":{"selection":"selection_ii"}},
+         {"filter":{"selection":"group_contact"}},
+          {"filter":{"selection":"physical_contact"}}
+  ],
   "encoding": {
-    "x": {"field": "dayofweek", "type": "ordinal"},
-    "y": {"aggregate": "mean", "field": "group_n", "type": "quantitative"},
+    "y": {"axis": {"title": "AVG NUM OF GROUP CONT PER PART", "titleColor":"red"}
+      ,"aggregate": "mean", "field": "group_n", "type": "quantitative"},
     "color": {"value": "red"},
           "opacity":{"condition":{"selection":"selection_iii","value":1},
     "value":0.2}
     }
+  }],
+  "resolve": {"scale": {"y": "independent"}}
   }
-  ]}, 
+  , 
    {
     "width":400,
     "height":300,
@@ -186,7 +207,8 @@
      {"filter":{"selection":"selection_i"}},
          {"filter":{"selection":"selection_ii"}},
       {"filter":{"selection":"selection_iii"}},
-         {"filter":{"selection":"group_contact"}}
+         {"filter":{"selection":"group_contact"}},
+          {"filter":{"selection":"physical_contact"}}
   ],
 
   "mark":{
@@ -196,6 +218,7 @@
     "y":{"field":"cnt_way","type":"nominal"},
     "x":{"aggregate":"count","type":"quantitative"},
     "color":{"field":"cnt_gender","type":"nominal"}
+    
     }}
   ]
 
