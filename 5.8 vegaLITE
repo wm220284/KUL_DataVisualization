@@ -139,6 +139,7 @@
 }
   }]
   },{  "concat":[{
+    
  "width":300,
 "height":300,
  "encoding": {
@@ -147,6 +148,7 @@
  "layer":[{
   "mark": "line",
     "transform":[
+      
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"gender"}},
      {"filter":{"selection":"selection_i"}},
@@ -171,11 +173,46 @@
   }},
   {
   "mark": "line",
+   "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_common.csv","name":"participant2"},
      "transform":[
+      {
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_extra.csv"},
+      "key": "part_id",
+      "fields":["part_id",	"group_n","group_cont","group_age0","group_age6","group_age12","group_age19","group_age60","group_age"]
+    }
+  },
+    
+    {
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_common.csv","name":"participant2"},
+      "key":"part_id",
+      "fields": ["hh_id","part_age","part_gender","part_id"]
+    }
+   } ,
+    {
+    "lookup":"hh_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_hh_common.csv"},
+      "key":"hh_id",
+      "fields": ["hh_size"]
+    }
+  }, 
+  {
+    "lookup":"part_id",
+  "from":{
+         "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_sday.csv"},
+      "key":"part_id",
+      "fields": ["sday_id","day","month","year","dayofweek"]
+    }
+  },
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"gender"}},
      {"filter":{"selection":"selection_i"}},
          {"filter":{"selection":"selection_ii"}},
+      {"filter":{"selection":"selection_iii"}},
          {"filter":{"selection":"group_contact"}},
           {"filter":{"selection":"physical_contact"}}
   ],
@@ -224,7 +261,41 @@
     "color":{"field":"cnt_gender","type":"nominal"}
     
     }},
-  { "transform":[
+  { "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_common.csv","name":"participant2"},
+     "transform":[
+      {
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_extra.csv"},
+      "key": "part_id",
+      "fields":["part_id",	"group_n","group_cont","group_age0","group_age6","group_age12","group_age19","group_age60","group_age"]
+    }
+  },
+    
+    {
+    "lookup":"part_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_participant_common.csv","name":"participant2"},
+      "key":"part_id",
+      "fields": ["hh_id","part_age","part_gender","part_id"]
+    }
+   } ,
+    {
+    "lookup":"hh_id",
+    "from":{
+      "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_hh_common.csv"},
+      "key":"hh_id",
+      "fields": ["hh_size"]
+    }
+  }, 
+  {
+    "lookup":"part_id",
+  "from":{
+         "data":{"url":"https://raw.githubusercontent.com/wm220284/miaomiaowu/master/2019_Zhang_China_sday.csv"},
+      "key":"part_id",
+      "fields": ["sday_id","day","month","year","dayofweek"]
+    }
+  },
     {"filter":{"selection":"gender_c"}},
      {"filter":{"selection":"gender"}},
      {"filter":{"selection":"selection_i"}},
